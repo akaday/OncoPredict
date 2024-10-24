@@ -3,6 +3,9 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 from sklearn.model_selection import train_test_split
 from src.data_loader import load_data, clean_data, preprocess_data
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, roc_curve
+import matplotlib.pyplot as plt
+import os
 
 def create_model(trial):
     n_layers = trial.suggest_int('n_layers', 1, 3)
@@ -35,8 +38,48 @@ def objective(trial):
     model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
 
     # Evaluate the model
-    score = model.evaluate(X_test, y_test, verbose=0)
-    return score[1]
+    y_pred = (model.predict(X_test) > 0.5).astype("int32")
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_pred)
+
+    # Save evaluation metrics
+    if not os.path.exists('results'):
+        os.makedirs('results')
+    with open('results/metrics.txt', 'w') as f:
+        f.write(f'Precision: {precision}\n')
+        f.write(f'Recall: {recall}\n')
+        f.write(f'F1-score: {f1}\n')
+        f.write(f'ROC-AUC: {roc_auc}\n')
+
+    # Confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure()
+    plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Confusion matrix')
+    plt.colorbar()
+    tick_marks = range(len(set(y_test)))
+    plt.xticks(tick_marks, tick_marks)
+    plt.yticks(tick_marks, tick_marks)
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.savefig('results/confusion_matrix.png')
+
+    # ROC curve
+    fpr, tpr, _ = roc_curve(y_test, y_pred)
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic')
+    plt.legend(loc="lower right")
+    plt.savefig('results/roc_curve.png')
+
+    return roc_auc
 
 if __name__ == '__main__':
     import argparse
@@ -67,3 +110,45 @@ if __name__ == '__main__':
         # Train the model using the training set and evaluate it using the testing set
         model = create_model(None)
         model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
+
+        # Evaluate the model
+        y_pred = (model.predict(X_test) > 0.5).astype("int32")
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+        roc_auc = roc_auc_score(y_test, y_pred)
+
+        # Save evaluation metrics
+        if not os.path.exists('results'):
+            os.makedirs('results')
+        with open('results/metrics.txt', 'w') as f:
+            f.write(f'Precision: {precision}\n')
+            f.write(f'Recall: {recall}\n')
+            f.write(f'F1-score: {f1}\n')
+            f.write(f'ROC-AUC: {roc_auc}\n')
+
+        # Confusion matrix
+        cm = confusion_matrix(y_test, y_pred)
+        plt.figure()
+        plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+        plt.title('Confusion matrix')
+        plt.colorbar()
+        tick_marks = range(len(set(y_test)))
+        plt.xticks(tick_marks, tick_marks)
+        plt.yticks(tick_marks, tick_marks)
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.savefig('results/confusion_matrix.png')
+
+        # ROC curve
+        fpr, tpr, _ = roc_curve(y_test, y_pred)
+        plt.figure()
+        plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('Receiver Operating Characteristic')
+        plt.legend(loc="lower right")
+        plt.savefig('results/roc_curve.png')
