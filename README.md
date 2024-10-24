@@ -16,3 +16,8 @@ OncoPredict is a project aimed at detecting cancer from blood samples using mach
 2. Install Python dependencies: `pip install tensorflow pandas`
 3. Install npm dependencies: `npm install`
 4. Run the training script: `python src/train.py`
+
+## Hyperparameter Tuning
+To run hyperparameter tuning using Optuna, follow these steps:
+1. Install the required dependencies: `pip install optuna`
+2. Run the training script with hyperparameter tuning: `python src/train.py --tune`
