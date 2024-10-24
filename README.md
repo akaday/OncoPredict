@@ -21,3 +21,10 @@ OncoPredict is a project aimed at detecting cancer from blood samples using mach
 To run hyperparameter tuning using Optuna, follow these steps:
 1. Install the required dependencies: `pip install optuna`
 2. Run the training script with hyperparameter tuning: `python src/train.py --tune`
+
+## Generating and Viewing Evaluation Metrics and Visualizations
+To generate and view detailed evaluation metrics and visualizations, follow these steps:
+1. Ensure you have the required dependencies: `pip install scikit-learn matplotlib`
+2. Run the training script: `python src/train.py`
+3. After training, evaluation metrics will be saved in the `results/metrics.txt` file.
+4. Confusion matrix and ROC curve visualizations will be saved in the `results/` directory as `confusion_matrix.png` and `roc_curve.png` respectively.
