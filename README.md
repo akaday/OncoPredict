@@ -15,7 +15,7 @@ OncoPredict is a project aimed at detecting cancer from blood samples using mach
 1. Clone the repo: `git clone https://github.com/your-username/OncoPredict.git`
 2. Install Python dependencies: `pip install tensorflow pandas`
 3. Install npm dependencies: `npm install`
-4. Run the training script: `python src/train.py`
+4. Run the training script: `npm run train`
 
 ## Hyperparameter Tuning
 To run hyperparameter tuning using Optuna, follow these steps:
@@ -42,5 +42,5 @@ To deploy the model using Flask, follow these steps:
 ## Running the Flask App Locally
 To run the Flask app locally, follow these steps:
 1. Install the required dependencies: `pip install flask`
-2. Run the Flask app: `python src/app.py`
+2. Run the Flask app: `npm start`
 3. Send a POST request to the `/predict` endpoint with the input data to get predictions.
