@@ -13,6 +13,6 @@ OncoPredict is a project aimed at detecting cancer from blood samples using mach
 
 ## How to Run
 1. Clone the repo: `git clone https://github.com/your-username/OncoPredict.git`
-2. Install Python dependencies: `pip install -r requirements.txt`
+2. Install Python dependencies: `pip install tensorflow pandas`
 3. Install npm dependencies: `npm install`
 4. Run the training script: `python src/train.py`
