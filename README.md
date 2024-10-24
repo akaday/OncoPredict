@@ -28,3 +28,19 @@ To generate and view detailed evaluation metrics and visualizations, follow thes
 2. Run the training script: `python src/train.py`
 3. After training, evaluation metrics will be saved in the `results/metrics.txt` file.
 4. Confusion matrix and ROC curve visualizations will be saved in the `results/` directory as `confusion_matrix.png` and `roc_curve.png` respectively.
+
+## Deploying the Model using Flask
+To deploy the model using Flask, follow these steps:
+1. Install the required dependencies: `pip install flask gunicorn`
+2. Create a `Procfile` in the root directory with the following content:
+   ```
+   web: gunicorn src.app:app
+   ```
+3. Create a new file `src/app.py` with the Flask application code.
+4. Deploy the application to Heroku or any other cloud platform that supports Flask.
+
+## Running the Flask App Locally
+To run the Flask app locally, follow these steps:
+1. Install the required dependencies: `pip install flask`
+2. Run the Flask app: `python src/app.py`
+3. Send a POST request to the `/predict` endpoint with the input data to get predictions.
